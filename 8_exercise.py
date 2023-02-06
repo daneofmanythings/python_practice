@@ -177,7 +177,7 @@ class RPSCLIPrinter :
         )
         return self.string_inserter(str_idx_list, self.declare_winner)
     
-    def computer_winner_stringer(self, computer:RPSComputer) -> str:
+    def computer_throw_stringer(self, computer:RPSComputer) -> str:
         '''Method that implements the inserter for a specific task
            Returns what the AI threw'''
         str_idx_list = (
@@ -211,9 +211,8 @@ def main() -> None :
     for num in range(NUM_PLAYERS) :  
         player_name = input(  # The indenting is to make nested func calls easier to read
             printer.string_inserter(
-                ((str(num + 1), -5),), printer.player_prompt  # Creating a tuple with one tuple as element
-            )                                                 # See string_inserter() definition above
-        )
+            ((str(num + 1), -5),), printer.player_prompt))
+        
         if player_name.lower() == COMPUTER :  # Checking for an AI opponent
             game.add_player(RPSComputer(player_name + str(num)))
         else :
@@ -229,13 +228,11 @@ def main() -> None :
             if player._is_computer :
                 player.get_throw()
             else :
-                while player.get_throw(  # the indenting is to make nested func calls easier to read
+                while player.get_throw(  # Nested function calls split up for readability
                     input(
-                        printer.string_inserter(
-                            ((player.name, 0),), printer.get_throw  # Creating a tuple with one tuple as an element
-                        )                                           # See string_inserter definition above
-                    )
-                ) :
+                    printer.string_inserter(
+                    ((player.name, 0),), printer.get_throw))) :
+
                     continue  # This might be hacky logic
         
         # Comparing the throws to find the round winner
@@ -243,9 +240,13 @@ def main() -> None :
         if round_winner is None :
             printer.cli_print(printer.declare_tie)
         else :
-            for player in game.players :  # Printing what the computer choses
+            # Checking to see if there's a computer to print its throw
+            for player in game.players :
                 if player._is_computer :
-                    printer.cli_print(printer.computer_winner_stringer(player))  # Custom method for pretty printing
+                    printer.cli_print(
+                        printer.computer_throw_stringer(player)  # Custom method for pretty printing
+                    )  
+            # Printing the winner
             printer.cli_print(
                 printer.round_winner_stringer(round_winner)  # Custom method for a pretty printing
             )
