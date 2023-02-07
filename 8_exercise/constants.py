@@ -1,30 +1,53 @@
 '''Holds the constants'''
 
+from enum import Enum, auto
+
+class Throws(Enum) :  # Values are strings to aid with printing. strEnum isn't implemented in 3.10
+    ROCK = 'rock'
+    PAPER = 'paper'
+    SCISSORS = 'scissors'
+
+class GlobalVars(Enum) :
+    NUM_PLAYERS = 2
+    COMPUTER = 'computer'
+
+# Currently, YES is never used
+class Responses(Enum) :
+    YES = auto()
+    NO = auto()
+
+THROW_CONVERTER = {  # Implementation specific
+    'r': Throws.ROCK,
+    'p': Throws.PAPER,
+    's': Throws.SCISSORS
+}
+
+RESPONSE_CONVERTER = {
+    'y': Responses.YES,
+    'n': Responses.NO
+}
+
 THROW_DICT = {  # Nested dictionary to grab the winner.
-    'r': {
-        'r': None,
-        'p': False,
-        's': True
+    Throws.ROCK: {
+        Throws.ROCK: None,
+        Throws.PAPER: False,
+        Throws.SCISSORS: True
     },
-    'p': {
-        'r': True,
-        'p': None,
-        's': False
+    Throws.PAPER: {
+        Throws.ROCK: True,
+        Throws.PAPER: None,
+        Throws.SCISSORS: False
     },
-    's': {
-        'r': False,
-        'p': True,
-        's': None
+    Throws.SCISSORS: {
+        Throws.ROCK: False,
+        Throws.PAPER: True,
+        Throws.SCISSORS: None
     }
 }
 
-THROW_CONVERTER = {  # Exists for prettier printing.
-    'r': 'rock',
-    'p': 'paper',
-    's': 'scissors'
-}
+# HELPER METHOD
+def validator(string:str, conversion_dict:dict[str:Enum]) -> tuple[bool,Enum]:
+    if not string or string[0] not in conversion_dict :
+        return False, None
+    return True, conversion_dict[string[0]]
 
-# Adding simple global constants to make the code look cleaner.
-NUM_PLAYERS = 2
-CONTINUE_RESPONSES = 'y', 'n'
-COMPUTER = 'computer'

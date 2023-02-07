@@ -1,7 +1,7 @@
 '''Holds the game class'''
 
 from player import RPSPlayer
-from constants import THROW_DICT, CONTINUE_RESPONSES
+from constants import THROW_DICT, Responses
 
 class RPSGame:
     def __init__(self) :
@@ -16,7 +16,7 @@ class RPSGame:
     def compare_throws(self) -> RPSPlayer | None :
         '''Returns the player that wins or None in the case of a tie
            after comparing throws from the class attribute'''
-        result = THROW_DICT[self.players[0].current_throw[0]][self.players[1].current_throw[0]]
+        result = THROW_DICT[self.players[0].current_throw][self.players[1].current_throw]
         self.rounds_played += 1          
         
         if result :
@@ -28,11 +28,7 @@ class RPSGame:
         else :
             None
 
-    def play_again(self, response: str) -> bool | None :
-        '''Validates a response and updates the self.playing boolean. Returns true for
-           while loop shenanigans'''
-        if not response or response.lower()[0] not in CONTINUE_RESPONSES:
-            return True
-        
-        if response == CONTINUE_RESPONSES[1] :
+    def play_again(self, response: Responses) -> None:
+        '''Adjusts the value of playing'''
+        if response == Responses.NO :
             self.playing = False

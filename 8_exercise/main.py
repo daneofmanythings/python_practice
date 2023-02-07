@@ -20,7 +20,7 @@
 from player import RPSPlayer, RPSComputer
 from game import RPSGame
 from printer import RPSCLIPrinter
-from constants import NUM_PLAYERS, COMPUTER
+from constants import validator, GlobalVars, RESPONSE_CONVERTER, THROW_CONVERTER
 
 def main() -> None :
     '''The game logic. Lots of loops.'''
@@ -31,11 +31,11 @@ def main() -> None :
     game = RPSGame()
     
     # Getting the names of the players
-    for num in range(NUM_PLAYERS) :  
+    for num in range(GlobalVars.NUM_PLAYERS.value) :  
         player_name = printer.cli_input_with_inserter(
             ((str(num + 1), -5),), printer.player_prompt)
         
-        if player_name.lower() == COMPUTER :  # Checking for an AI opponent
+        if player_name.lower() == GlobalVars.COMPUTER.value :  # Checking for an AI opponent
             game.add_player(RPSComputer(player_name + str(num)))
         else :
             game.add_player(RPSPlayer(player_name))
@@ -50,11 +50,16 @@ def main() -> None :
             if player._is_computer :
                 player.get_throw()
             else :
-                while player.get_throw(  # Nested function calls split up for readability
-                    printer.cli_input_with_inserter(
-                    ((player.name, 0),), printer.get_throw)
-                ) :
-                    continue  # This might be hacky logic
+                while True :  # This loop exists to validate input then convert input to enum
+                    valid, converted = validator(
+                        printer.cli_input_with_inserter(  # First arguement for validator
+                        ((player.name,0),), printer.get_throw)  # Arguments for inserter
+                        ,THROW_CONVERTER  # Second arguement for validator
+                    )
+                    if not valid :
+                        continue
+                    player.get_throw(converted)
+                    break
         
         # Comparing the throws to find the round winner
         round_winner = game.compare_throws()
@@ -73,8 +78,14 @@ def main() -> None :
             )
         
         # Ask to play again
-        while game.play_again(printer.cli_input(printer.play_again)) :
-            continue  # Hacky?
+        while True :
+            valid, converted = validator(
+                printer.cli_input(printer.play_again), RESPONSE_CONVERTER
+            )
+            if not valid :
+                continue
+            game.play_again(converted)
+            break
         
         printer.redraw()
     

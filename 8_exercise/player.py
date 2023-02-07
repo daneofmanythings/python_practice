@@ -1,26 +1,23 @@
 '''Holds the player class'''
 
 import random
-from constants import THROW_DICT
+from constants import Throws, THROW_DICT
 
 class RPSPlayer :
     def __init__(self, name, is_computer=False) :
-        self.name = name 
-        self.current_throw = None
+        self.name:str = name 
+        self.current_throw:Throws = None
         self.wins:int = 0
-        self._is_computer = is_computer
+        self._is_computer:bool = is_computer
 
     def has_won(self) -> None:
         '''Increments wins'''
         self.wins += 1
 
-    def get_throw(self, throw: str) -> bool | None :
+    def get_throw(self, throw:Throws) -> None :
         '''Validates and updates a throw string. Returns true for
            while loop shenanigans.'''
-        if not throw or throw.lower()[0] not in THROW_DICT :
-            return True
-        else :
-            self.current_throw = throw.lower()
+        self.current_throw = throw
 
     def __eq__(self, other) :
         '''Enables ordering'''
@@ -43,4 +40,5 @@ class RPSComputer(RPSPlayer) :
 
     def get_throw(self) -> None :
         '''Computer chooses a throw randomly'''
-        self.current_throw = random.choice(tuple(THROW_DICT))
+        self.current_throw = random.choice(tuple(THROW_DICT.keys()))
+        

@@ -2,7 +2,6 @@
 
 import os
 from player import RPSPlayer, RPSComputer
-from constants import THROW_CONVERTER
 
 class RPSCLIPrinter :
     def __init__(self) :
@@ -40,7 +39,7 @@ class RPSCLIPrinter :
         '''Method that implements the inserter for a specific task
            Returns a string for the round winner'''
         str_idx_list = (
-            (THROW_CONVERTER[player.current_throw[0]], 14),
+            (player.current_throw.value, 14),
             (player.wins, -7),
             (player.name, 0)
         )
@@ -61,7 +60,7 @@ class RPSCLIPrinter :
            Returns what the AI threw'''
         str_idx_list = (
             (computer.name, 0),
-            (THROW_CONVERTER[computer.current_throw], -1)
+            (computer.current_throw.value, -1)
         )
         return self.string_inserter(str_idx_list, self.computer_throw)
     
