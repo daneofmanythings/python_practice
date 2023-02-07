@@ -15,8 +15,7 @@ class RPSPlayer :
         self.wins += 1
 
     def get_throw(self, throw:Throws) -> None :
-        '''Validates and updates a throw string. Returns true for
-           while loop shenanigans.'''
+        '''Sets the throw attribute'''
         self.current_throw = throw
 
     def __eq__(self, other) :
