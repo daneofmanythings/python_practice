@@ -2,14 +2,14 @@
 
 from enum import Enum, auto
 
+class GlobalVars(Enum) :
+    NUM_PLAYERS = 2
+    COMPUTER = 'computer'
+
 class Throws(Enum) :  # Values are strings to aid with printing. strEnum isn't implemented in 3.10
     ROCK = 'rock'
     PAPER = 'paper'
     SCISSORS = 'scissors'
-
-class GlobalVars(Enum) :
-    NUM_PLAYERS = 2
-    COMPUTER = 'computer'
 
 # Currently, YES is never used
 class Responses(Enum) :
