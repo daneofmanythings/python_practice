@@ -56,14 +56,14 @@ class RPSPlayer :
         self.wins:int = 0
         self._is_computer = is_computer
 
-    def has_won(self) :
+    def has_won(self) -> None:
         '''Increments wins'''
         self.wins += 1
 
-    def get_throw(self, throw: str) :
+    def get_throw(self, throw: str) -> bool | None :
         '''Validates and updates a throw string. Returns true for
            while loop shenanigans.'''
-        if throw.lower()[0] not in THROW_DICT :
+        if not throw or throw.lower()[0] not in THROW_DICT :
             return True
         else :
             self.current_throw = throw.lower()
@@ -87,7 +87,7 @@ class RPSComputer(RPSPlayer) :
         self.name = name
         self._is_computer = is_computer
 
-    def get_throw(self) :
+    def get_throw(self) -> None :
         '''Computer chooses a throw randomly'''
         self.current_throw = random.choice(tuple(THROW_DICT))
 
@@ -148,14 +148,14 @@ class RPSCLIPrinter :
         self.declare_tie = 'The game is a tie.'
         self.declare_winner = '\n is the winner! They won  to  '
 
-    def string_inserter(self, str_idx_list:list[list[str:int]], into:str) -> str :
+    def string_inserter(self, str_idx_list:list[list[str:int]], target:str) -> str :
         '''Allows you to insert multiple strings into a target string
            by giving it a list of pairs: (string_to_be_inserted, index_to_insert)
            Returns the string'''
-        for thing in str_idx_list :
-            string, idx = thing  # for readability
-            into = into[:idx] + str(string) + into[idx:]
-        return into
+        for str_idx in str_idx_list :
+            string, idx = str_idx  # for readability
+            target= target[:idx] + str(string) + target[idx:]
+        return target 
 
     def round_winner_stringer(self, player:RPSPlayer) -> str:
         '''Method that implements the inserter for a specific task
@@ -189,14 +189,21 @@ class RPSCLIPrinter :
     def cli_print(self, string: str) -> None :
         '''Keeping print calls out of other classes/functions'''
         print(string)
+
+    def cli_input(self, string:str) -> str :
+        return input(string)
     
-    # TODO: THIS MIGHT BE TOTALLY GARBAGE. NOT HANDLED WELL!?
+    def cli_input_with_inserter(self, str_idx_list:list[list[str:int]], target:str) -> str :
+        '''Implementing inputs with string inserter to reduce line bloat in main()
+           and to pull out implementation details'''
+        return input(self.string_inserter(str_idx_list, target))
+    
     def redraw(self) :
         '''Redraws the screen to avoid clutter and keep secrets'''
-        try :
-            os.system('clear')
-        except :
+        if os.name == 'nt' :
             os.system('cls')
+        else :
+            os.system('clear')
         self.cli_print(self.opener)
 
 def main() -> None :
@@ -209,9 +216,8 @@ def main() -> None :
     
     # Getting the names of the players
     for num in range(NUM_PLAYERS) :  
-        player_name = input(  # The indenting is to make nested func calls easier to read
-            printer.string_inserter(
-            ((str(num + 1), -5),), printer.player_prompt))
+        player_name = printer.cli_input_with_inserter(
+            ((str(num + 1), -5),), printer.player_prompt)
         
         if player_name.lower() == COMPUTER :  # Checking for an AI opponent
             game.add_player(RPSComputer(player_name + str(num)))
@@ -229,10 +235,9 @@ def main() -> None :
                 player.get_throw()
             else :
                 while player.get_throw(  # Nested function calls split up for readability
-                    input(
-                    printer.string_inserter(
-                    ((player.name, 0),), printer.get_throw))) :
-
+                    printer.cli_input_with_inserter(
+                    ((player.name, 0),), printer.get_throw)
+                ) :
                     continue  # This might be hacky logic
         
         # Comparing the throws to find the round winner
@@ -252,7 +257,7 @@ def main() -> None :
             )
         
         # Ask to play again
-        while game.play_again(input(printer.play_again)):
+        while game.play_again(printer.cli_input(printer.play_again)) :
             continue  # Hacky?
         
         printer.redraw()
