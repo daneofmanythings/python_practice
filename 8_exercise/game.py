@@ -31,7 +31,7 @@ class RPSGame:
     def play_again(self, response: str) -> bool | None :
         '''Validates a response and updates the self.playing boolean. Returns true for
            while loop shenanigans'''
-        if response.lower()[0] not in CONTINUE_RESPONSES:
+        if not response or response.lower()[0] not in CONTINUE_RESPONSES:
             return True
         
         if response == CONTINUE_RESPONSES[1] :
