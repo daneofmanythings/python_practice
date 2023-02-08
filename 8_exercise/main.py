@@ -66,6 +66,7 @@ def main() -> None :
         
         # Comparing the throws to find the round winner
         round_winner = game.compare_throws()
+        
         printer.redraw()
         printer.cli_print(printer.formatter([game.round_num], printer.round))
         
@@ -96,7 +97,7 @@ def main() -> None :
         printer.cli_print(printer.formatter([game.round_num], printer.round))
     
     printer.redraw()
-    
+
     # Once the game ends, find winner, print winner
     winner, loser = max(game.players), min(game.players)
 
