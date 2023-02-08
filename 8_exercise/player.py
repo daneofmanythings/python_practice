@@ -1,43 +1,59 @@
 '''Holds the player class'''
 
+from __future__ import annotations
 import random
 from constants import Throws, THROW_DICT
+from abc import ABC, abstractmethod
 
-class RPSPlayer :
-    def __init__(self, name, is_computer=False) :
+class RPSPlayer(ABC) :
+    def __init__(self, name) :
+        self.name = name
+        self.wins = None
+    
+    @abstractmethod
+    def has_won(self):
+        pass
+
+    @abstractmethod
+    def set_throw(self):
+        pass
+
+    def __lt__(self, other:RPSPlayer) -> bool :
+        return self.wins < other.wins
+    
+    def __str__(self) -> str :
+        return self.name
+
+class RPSHuman(RPSPlayer) :
+    def __init__(self, name) :
         self.name:str = name 
         self.current_throw:Throws = None
         self.wins:int = 0
-        self._is_computer:bool = is_computer
 
     def has_won(self) -> None:
         '''Increments wins'''
         self.wins += 1
 
-    def get_throw(self, throw:Throws) -> None :
+    def set_throw(self, throw:Throws) -> None :
         '''Sets the throw attribute'''
         self.current_throw = throw
-
-    def __eq__(self, other) :
-        '''Enables ordering'''
-        return self.wins == other.wins
-        
-    def __lt__(self, other) :
-        '''Enables ordering'''
-        return self.wins < other.wins
     
     def __repr__(self) :
-        '''Shouldn't need this, but I couldn't find a print bug,
-           so I strong-armed it'''
-        return self.name
+        return f'RPSHuman({self.name})'
     
 class RPSComputer(RPSPlayer) :
-    def __init__(self, name, is_computer=True) :
-        super().__init__(self)
-        self.name = name
-        self._is_computer = is_computer
+    def __init__(self, name) :
+        self.name:str = name
+        self.current_throw:Throws = None
+        self.wins:int = 0
 
-    def get_throw(self) -> None :
+    def has_won(self) -> None :
+        '''Increments wins'''
+        self.wins += 1
+
+    def set_throw(self) -> None :
         '''Computer chooses a throw randomly'''
         self.current_throw = random.choice(tuple(THROW_DICT.keys()))
-        
+
+    def __repr__(self) -> str :
+        return f'RPSComputer({self.name})'

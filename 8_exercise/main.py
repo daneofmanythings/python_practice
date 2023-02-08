@@ -17,10 +17,12 @@
 # string objects and print logic should only be in global variables and a class.        #
 #########################################################################################
 
-from player import RPSPlayer, RPSComputer
+from constants import (RESPONSE_CONVERTER, THROW_CONVERTER, computer_validator,
+                       validator)
 from game import RPSGame
+from player import RPSComputer, RPSHuman
 from printer import RPSCLIPrinter
-from constants import validator, GlobalVars, RESPONSE_CONVERTER, THROW_CONVERTER
+
 
 def main() -> None :
     '''The game logic. Lots of loops.'''
@@ -31,14 +33,14 @@ def main() -> None :
     game = RPSGame()
     
     # Getting the names of the players
-    for num in range(GlobalVars.NUM_PLAYERS.value) :  
-        player_name = printer.cli_input_with_inserter(
-            ((str(num + 1), -5),), printer.player_prompt)
+    for num in range(2) :  
+        player_name = printer.cli_input(
+            printer.formatter([num + 1], printer.player_prompt))
         
-        if player_name.lower() == GlobalVars.COMPUTER.value :  # Checking for an AI opponent
+        if computer_validator(player_name) :  # Checking for an AI opponent
             game.add_player(RPSComputer(player_name + str(num)))
         else :
-            game.add_player(RPSPlayer(player_name))
+            game.add_player(RPSHuman(player_name))
         
         printer.redraw()
     
@@ -47,43 +49,41 @@ def main() -> None :
         
         # Retrieving and storing the throws for both players
         for player in game.players :
-            if player._is_computer :
-                player.get_throw()
+            if isinstance(player, RPSComputer) :
+                player.set_throw()
             else :
                 while True :  # This loop exists to validate input then convert input to enum
-                    valid, converted = validator(
-                        printer.cli_input_with_inserter(  # First arguement for validator
-                        ((player.name,0),), printer.get_throw)  # Arguments for inserter
-                        ,THROW_CONVERTER  # Second arguement for validator
-                    )
+                    response = printer.cli_input(printer.formatter([player.name], printer.get_throw))
+                    valid, converted = validator(response, THROW_CONVERTER)
+                    
                     if not valid :
                         continue
-                    player.get_throw(converted)
+                    
+                    player.set_throw(converted)
                     break
         
         # Comparing the throws to find the round winner
         round_winner = game.compare_throws()
+        printer.redraw()
+        
+        # Printing the throws
+        for player in game.players :
+            printer.cli_print(printer.throw_stringer(player))
+        
+        # Printing the winner or tie
         if round_winner is None :
             printer.cli_print(printer.declare_tie)
         else :
-            # Checking to see if there's a computer to print its throw
-            for player in game.players :
-                if player._is_computer :
-                    printer.cli_print(
-                        printer.computer_throw_stringer(player)  # Custom method for pretty printing
-                    )  
-            # Printing the winner
-            printer.cli_print(
-                printer.round_winner_stringer(round_winner)  # Custom method for a pretty printing
-            )
+            printer.cli_print(printer.round_winner_stringer(round_winner))
         
         # Ask to play again
         while True :
             valid, converted = validator(
-                printer.cli_input(printer.play_again), RESPONSE_CONVERTER
-            )
+                printer.cli_input(printer.play_again), RESPONSE_CONVERTER)
+            
             if not valid :
                 continue
+            
             game.play_again(converted)
             break
         
@@ -95,9 +95,7 @@ def main() -> None :
     if winner.wins == loser.wins :
         printer.cli_print(printer.declare_tie)
     else :
-        printer.cli_print(
-            printer.game_winner_stringer(winner, loser)  # Custom method for pretty printing
-        )
+        printer.cli_print(printer.game_winner_stringer(winner, loser))
     
     # Buh Bye
     printer.cli_print(printer.closer)

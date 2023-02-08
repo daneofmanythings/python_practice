@@ -2,10 +2,6 @@
 
 from enum import Enum, auto
 
-class GlobalVars(Enum) :
-    NUM_PLAYERS = 2
-    COMPUTER = 'computer'
-
 class Throws(Enum) :  # Values are strings to aid with printing. strEnum isn't implemented in 3.10
     ROCK = 'rock'
     PAPER = 'paper'
@@ -52,4 +48,7 @@ def validator(string:str, conversion_dict:dict[str:Enum]) -> tuple[bool,Enum]:
     if not string or string[0] not in conversion_dict :
         return False, None
     return True, conversion_dict[string[0]]
+
+def computer_validator(name:str) -> bool :
+    return name.lower() == 'computer'
 
