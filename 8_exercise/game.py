@@ -6,18 +6,18 @@ from constants import THROW_DICT, Responses
 class RPSGame:
     def __init__(self) :
         self.players:list[RPSPlayer] = list()
-        self.rounds_played:int = 1
+        self.round_num:int = 1
         self.playing:bool = True
 
     def add_player(self, player:RPSPlayer) -> None :
         '''Adds a player to the players list'''
         self.players.append(player)        
     
+    #TODO: Maybe change how this functions and throw some of this logic to the main function
     def compare_throws(self) -> RPSPlayer | None :
         '''Returns the player that wins or None in the case of a tie
            after comparing throws from the class attribute'''
         result = THROW_DICT[self.players[0].current_throw][self.players[1].current_throw]
-        self.rounds_played += 1          
         
         if result :
             self.players[0].has_won()
@@ -32,3 +32,6 @@ class RPSGame:
         '''Adjusts the value of playing'''
         if response == Responses.NO :
             self.playing = False
+
+    def round_played(self) -> None :
+        self.round_num += 1

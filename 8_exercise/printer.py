@@ -22,7 +22,8 @@ class RPSCLIPrinter :
         self.get_throw = '{0}, choose rock, paper, or scissors >>> '
         self.computer_throw = '{0} threw {1}'
         self.play_again = '\nWould you like to play again? (y or n) >>> '
-        self.round = '\n--------------------- Round  ----------------------'
+        self.round = colored(25, 100, 200,
+            '\t\t\t\t  Round {0}\n')
         self.win_round = colored(0, 255, 0,
             '\n{0} has won with {1}! They have won {2} times.')
         self.declare_tie = 'The game is a tie.'
