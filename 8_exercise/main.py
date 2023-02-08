@@ -33,7 +33,7 @@ def main() -> None :
     game = RPSGame()
     
     # Getting the names of the players
-    for num in range(2) :  
+    for num in range(2) :  # <- Will always be 2 for this implementation
         player_name = printer.cli_input(
             printer.formatter([num + 1], printer.player_prompt))
         

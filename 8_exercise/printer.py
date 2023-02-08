@@ -11,7 +11,9 @@ class RPSCLIPrinter :
                  Try not to peek at your opponent\'s moves!\n
             ----------------------------------------------------
             '''
-        self.single_player = '''If you would like to play against the computer enter \'computer\' as the name.\n'''
+        self.single_player = colored(255, 0, 0,
+            '''If you would like to play against the computer enter \'computer\' as the name.\n'''
+        )
         self.closer = '''
             \n\t    ====================================================\n
             \t\t  Thank you for playing!
@@ -19,9 +21,10 @@ class RPSCLIPrinter :
         self.player_prompt = 'Enter the name for player {0} >>> '
         self.get_throw = '{0}, choose rock, paper, or scissors >>> '
         self.computer_throw = '{0} threw {1}'
-        self.play_again = 'Would you like to play again? (y or n) >>> '
+        self.play_again = '\nWould you like to play again? (y or n) >>> '
         self.round = '\n--------------------- Round  ----------------------'
-        self.win_round = '{0} has won with {1}! They have won {2} times.'
+        self.win_round = colored(0, 255, 0,
+            '\n{0} has won with {1}! They have won {2} times.')
         self.declare_tie = 'The game is a tie.'
         self.declare_winner = '\n{0} is the winner! They won {1} to {2}'
 
@@ -71,3 +74,7 @@ class RPSCLIPrinter :
         else :
             os.system('clear')
         self.cli_print(self.opener)
+
+# HELPER METHOD
+def colored(r:int, g:int, b:int, text:str) -> str :
+    return f"\033[38;2;{r};{g};{b}m{text}\033[0m"
