@@ -8,7 +8,6 @@ from abc import ABC, abstractmethod
 class RPSPlayer(ABC) :
     def __init__(self, name) :
         self.name = name
-        self.wins = None
     
     @abstractmethod
     def has_won(self):
@@ -17,12 +16,6 @@ class RPSPlayer(ABC) :
     @abstractmethod
     def set_throw(self):
         pass
-
-    def __lt__(self, other:RPSPlayer) -> bool :
-        return self.wins < other.wins
-    
-    def __str__(self) -> str :
-        return self.name
 
 class RPSHuman(RPSPlayer) :
     def __init__(self, name) :
@@ -38,6 +31,12 @@ class RPSHuman(RPSPlayer) :
         '''Sets the throw attribute'''
         self.current_throw = throw
     
+    def __lt__(self, other:RPSPlayer) -> bool :
+        return self.wins < other.wins
+    
+    def __str__(self) -> str :
+        return self.name
+
     def __repr__(self) :
         return f'RPSHuman({self.name})'
     
@@ -54,6 +53,12 @@ class RPSComputer(RPSPlayer) :
     def set_throw(self) -> None :
         '''Computer chooses a throw randomly'''
         self.current_throw = random.choice(tuple(THROW_DICT.keys()))
+
+    def __lt__(self, other:RPSPlayer) -> bool :
+        return self.wins < other.wins
+    
+    def __str__(self) -> str :
+        return self.name
 
     def __repr__(self) -> str :
         return f'RPSComputer({self.name})'
