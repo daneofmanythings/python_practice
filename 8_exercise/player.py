@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 import random
-from data import Throws, THROW_DICT
+from data import Throws, THROW_CONVERTER, THROW_DICT, data_input, first_in_str_validator
 from abc import ABC, abstractmethod
 
 class RPSPlayer(ABC) :
@@ -10,18 +10,18 @@ class RPSPlayer(ABC) :
         self.name = name
     
     @abstractmethod
-    def has_won(self):
+    def has_won(self) -> None :
         pass
 
     @abstractmethod
-    def automate_throw(self):
+    def get_throw(self) -> Throws :
         pass
 
     @abstractmethod
-    def set_throw(self):
+    def set_throw(self) -> None :
         pass
 
-class RPSHuman(RPSPlayer) :
+class IOPlayer(RPSPlayer) :
     def __init__(self, name) :
         self.name:str = name 
         self.current_throw:Throws = None
@@ -31,14 +31,21 @@ class RPSHuman(RPSPlayer) :
         '''Increments wins'''
         self.wins += 1
 
-    def set_throw(self, throw:Throws | None) -> None :
+    def get_throw(self) -> Throws :
+        '''Implemented with strings and helper functions from data module'''
+        while True :
+            response = data_input(
+                f'{self.name}, choose rock, paper, or scissors >>> '
+            )
+            if not first_in_str_validator(response, THROW_CONVERTER) :
+                continue
+
+            return THROW_CONVERTER[response]
+
+    def set_throw(self, throw:Throws) -> None :
         '''Sets the throw attribute'''
         self.current_throw = throw
 
-    def automate_throw(self) -> None :
-        '''Player does not choose a throw randomly'''
-        pass
-    
     def __lt__(self, other:RPSPlayer) -> bool :
         return self.wins < other.wins
     
@@ -48,7 +55,7 @@ class RPSHuman(RPSPlayer) :
     def __repr__(self) :
         return f'RPSHuman({self.name})'
     
-class RPSComputer(RPSPlayer) :
+class AIPlayer(RPSPlayer) :
     def __init__(self, name) :
         self.name:str = name
         self.current_throw:Throws = None
@@ -57,14 +64,14 @@ class RPSComputer(RPSPlayer) :
     def has_won(self) -> None :
         '''Increments wins'''
         self.wins += 1
-
-    def set_throw(self, throw:Throws | None) -> None :
-        '''Sets the throw attribute'''
-        self.throw = throw
-
-    def automate_throw(self) -> None :
+    
+    def get_throw(self) -> Throws :
         '''Computer chooses a throw randomly'''
-        self.current_throw = random.choice(tuple(THROW_DICT.keys()))
+        return random.choice(tuple(THROW_DICT.keys()))
+
+    def set_throw(self, throw:Throws) -> None :
+        '''Sets the throw attribute'''
+        self.current_throw = throw
 
     def __lt__(self, other:RPSPlayer) -> bool :
         return self.wins < other.wins

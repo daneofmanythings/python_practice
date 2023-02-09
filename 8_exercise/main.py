@@ -20,13 +20,12 @@
 from data import (
     COMPUTER,
     RESPONSE_CONVERTER,
-    THROW_CONVERTER,
     data_input,
     str_validator,
     first_in_str_validator,
 )
 from game import RPSGame
-from player import RPSComputer, RPSHuman
+from player import IOPlayer, AIPlayer
 from printer import RPSCLIPrinter
 
 
@@ -41,13 +40,15 @@ def main() -> None:
     # Getting the names of the players
     for num in range(2):  # <- Will always be 2 for this implementation
         player_name = data_input(
-            printer.formatter([num + 1], printer.player_prompt)
-        )
+            printer.formatter([num + 1], printer.player_prompt))
 
         if str_validator(player_name, COMPUTER):  # Checking for an AI opponent
-            game.add_player(RPSComputer(player_name + str(num)))
+            game.add_player(AIPlayer(player_name + str(num)))
         else:
-            game.add_player(RPSHuman(player_name))
+            if not player_name :
+                game.add_player(IOPlayer('dumb' * (num + 1)))
+            else :
+                game.add_player(IOPlayer(player_name))
 
         printer.redraw()
 
@@ -55,27 +56,16 @@ def main() -> None:
 
     # Main play loop
     while game.playing:
-        # Retrieving and storing the throws for both players
+        # Getting and setting the throws for both players
         for player in game.players:
-            player.automate_throw()
-            if player.current_throw is None :
-                while True :  # This loop exists to validate input then convert input to enum
-                    response = data_input(
-                        printer.formatter([player.name], printer.throw_prompt)
-                    )
-                    valid, converted = first_in_str_validator(response, THROW_CONVERTER)
+            throw = player.get_throw()
+            player.set_throw(throw)
 
-                    if not valid:
-                        continue
-
-                    player.set_throw(converted)
-                    break
+            printer.redraw()
+            printer.cli_print(printer.formatter([game.round_num], printer.round))
 
         # Comparing the throws to find the round winner
         round_winner = game.compare_throws()
-
-        printer.redraw()
-        printer.cli_print(printer.formatter([game.round_num], printer.round))
 
         # Printing the throws
         for player in game.players:
@@ -89,14 +79,12 @@ def main() -> None:
 
         # Ask to play again
         while True:
-            valid, converted = first_in_str_validator(
-                data_input(printer.play_again), RESPONSE_CONVERTER
-            )
+            response = data_input(printer.play_again)
 
-            if not valid:
+            if not first_in_str_validator(response, RESPONSE_CONVERTER):
                 continue
 
-            game.play_again(converted)
+            game.play_again(RESPONSE_CONVERTER[response])
             break
 
         # End of round cleanup. Resetting throws and incrementing the round number.

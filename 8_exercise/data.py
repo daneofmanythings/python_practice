@@ -47,12 +47,12 @@ THROW_DICT = {  # Nested dictionary to grab the winner.
 def data_input(string:str) -> str :
     return input(string)
 
-def first_in_str_validator(string:str, conversion_dict:dict[str:Enum]) -> tuple[bool,Enum]:
+def first_in_str_validator(string:str, conversion_dict:dict[str:Enum]) -> bool :
     '''Validates the string against the conversion dictionary and returns the converted
        object if True'''
     if not string or string[0] not in conversion_dict :
-        return False, None
-    return True, conversion_dict[string[0]]
+        return False
+    return True
 
 def str_validator(string:str, target:str) -> bool :
     return string.lower() == target
