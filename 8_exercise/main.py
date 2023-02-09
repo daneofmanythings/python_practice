@@ -114,7 +114,7 @@ def main() -> None:
     if winner.wins == loser.wins:
         printer.cli_print(printer.declare_tie)
     else:
-        printer.cli_print(printer.game_winner_stringer(winner, loser))
+        printer.cli_print(printer.game_winner_stringer(winner, loser, game))
 
     # Buh Bye
     printer.cli_print(printer.closer)

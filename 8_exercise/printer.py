@@ -2,6 +2,7 @@
 
 import os
 from player import RPSPlayer
+from game import RPSGame
 
 class RPSCLIPrinter :
     def __init__(self) :
@@ -27,7 +28,7 @@ class RPSCLIPrinter :
         self.win_round = colored(0, 255, 0,
             '\n{0} has won with {1}! They have won {2} times.')
         self.declare_tie = 'The game is a tie.'
-        self.declare_winner = '\n{0} is the winner! They won {1} to {2}'
+        self.declare_winner = '\n{0} is the winner! They won {1} to {2} out of {3} rounds.'
 
     def formatter(self, strings:tuple[str], target:str) -> str :
         return target.format(*strings)
@@ -42,13 +43,14 @@ class RPSCLIPrinter :
         )
         return self.formatter(str_list, self.win_round)
     
-    def game_winner_stringer(self, winner:RPSPlayer, loser:RPSPlayer) -> str :
+    def game_winner_stringer(self, winner:RPSPlayer, loser:RPSPlayer, game:RPSGame) -> str :
         '''Method that implements the formatter for a specific task
            Returns a string for the game winner'''
         str_list = (
             winner.name,
             winner.wins,
-            loser.wins
+            loser.wins,
+            game.round_num
         )
         return self.formatter(str_list, self.declare_winner)
     
