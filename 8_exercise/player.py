@@ -14,7 +14,7 @@ class RPSPlayer(ABC) :
         pass
 
     @abstractmethod
-    def get_throw(self):
+    def automate_throw(self):
         pass
 
     @abstractmethod
@@ -35,7 +35,8 @@ class RPSHuman(RPSPlayer) :
         '''Sets the throw attribute'''
         self.current_throw = throw
 
-    def get_throw(self) -> None :
+    def automate_throw(self) -> None :
+        '''Player does not choose a throw randomly'''
         pass
     
     def __lt__(self, other:RPSPlayer) -> bool :
@@ -58,9 +59,10 @@ class RPSComputer(RPSPlayer) :
         self.wins += 1
 
     def set_throw(self, throw:Throws | None) -> None :
+        '''Sets the throw attribute'''
         self.throw = throw
 
-    def get_throw(self) -> None :
+    def automate_throw(self) -> None :
         '''Computer chooses a throw randomly'''
         self.current_throw = random.choice(tuple(THROW_DICT.keys()))
 

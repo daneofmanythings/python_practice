@@ -57,7 +57,7 @@ def main() -> None:
     while game.playing:
         # Retrieving and storing the throws for both players
         for player in game.players:
-            player.get_throw()
+            player.automate_throw()
             if player.current_throw is None :
                 while True :  # This loop exists to validate input then convert input to enum
                     response = data_input(
@@ -98,9 +98,9 @@ def main() -> None:
 
             game.play_again(converted)
             break
-        
-        game.reset_throws()
 
+        # End of round cleanup. Resetting throws and incrementing the round number.
+        game.reset_throws()
         game.round_played()
 
         printer.redraw()
