@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 import random
-from constants import Throws, THROW_DICT
+from data import Throws, THROW_DICT
 from abc import ABC, abstractmethod
 
 class RPSPlayer(ABC) :
@@ -11,6 +11,10 @@ class RPSPlayer(ABC) :
     
     @abstractmethod
     def has_won(self):
+        pass
+
+    @abstractmethod
+    def get_throw(self):
         pass
 
     @abstractmethod
@@ -27,9 +31,12 @@ class RPSHuman(RPSPlayer) :
         '''Increments wins'''
         self.wins += 1
 
-    def set_throw(self, throw:Throws) -> None :
+    def set_throw(self, throw:Throws | None) -> None :
         '''Sets the throw attribute'''
         self.current_throw = throw
+
+    def get_throw(self) -> None :
+        pass
     
     def __lt__(self, other:RPSPlayer) -> bool :
         return self.wins < other.wins
@@ -50,7 +57,10 @@ class RPSComputer(RPSPlayer) :
         '''Increments wins'''
         self.wins += 1
 
-    def set_throw(self) -> None :
+    def set_throw(self, throw:Throws | None) -> None :
+        self.throw = throw
+
+    def get_throw(self) -> None :
         '''Computer chooses a throw randomly'''
         self.current_throw = random.choice(tuple(THROW_DICT.keys()))
 

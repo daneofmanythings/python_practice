@@ -19,8 +19,8 @@ class RPSCLIPrinter :
             \t\t  Thank you for playing!
         '''
         self.player_prompt = 'Enter the name for player {0} >>> '
-        self.get_throw = '{0}, choose rock, paper, or scissors >>> '
-        self.computer_throw = '{0} threw {1}'
+        self.throw_prompt = '{0}, choose rock, paper, or scissors >>> '
+        self.throw_output = '{0} threw {1}'
         self.play_again = '\nWould you like to play again? (y or n) >>> '
         self.round = colored(25, 100, 200,
             '\t\t\t\t  Round {0}\n')
@@ -59,15 +59,12 @@ class RPSCLIPrinter :
             player.name,
             player.current_throw.value
         )
-        return self.formatter(str_list, self.computer_throw)
+        return self.formatter(str_list, self.throw_output)
     
     def cli_print(self, string: str) -> None :
         '''Keeping print calls out of other classes/functions'''
         print(string)
 
-    def cli_input(self, string:str) -> str :
-        return input(string)
-    
     def redraw(self) :
         '''Redraws the screen to avoid clutter and keep secrets'''
         if os.name == 'nt' :
@@ -76,6 +73,6 @@ class RPSCLIPrinter :
             os.system('clear')
         self.cli_print(self.opener)
 
-# HELPER METHOD
+# HELPER FUNCTION
 def colored(r:int, g:int, b:int, text:str) -> str :
     return f"\033[38;2;{r};{g};{b}m{text}\033[0m"

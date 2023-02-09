@@ -1,7 +1,7 @@
 '''Holds the game class'''
 
 from player import RPSPlayer
-from constants import THROW_DICT, Responses
+from data import THROW_DICT, Responses
 
 class RPSGame:
     def __init__(self) :
@@ -27,6 +27,10 @@ class RPSGame:
             return self.players[1]
         else :
             None
+
+    def reset_throws(self) -> None :
+        for player in self.players :
+            player.set_throw(None)
 
     def play_again(self, response: Responses) -> None:
         '''Adjusts the value of playing'''
