@@ -32,10 +32,10 @@ class IOPlayer(RPSPlayer) :
         self.wins += 1
 
     def get_throw(self) -> Throws :
-        '''Implemented with strings and helper functions from data module'''
+        '''Implemented as a wrapper for helper functions from data module'''
         while True :
             response = data_input()
-            
+
             if not first_in_str_validator(response, THROW_CONVERTER) :
                 continue
 

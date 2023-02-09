@@ -45,6 +45,7 @@ THROW_DICT = {  # Nested dictionary to grab the winner.
 
 # HELPER FUNCTIONS
 def data_input(*args) -> str :
+    '''Wrapper for input()'''
     return input(*args)
 
 def first_in_str_validator(string:str, conversion_dict:dict[str:Enum]) -> bool :
@@ -55,4 +56,5 @@ def first_in_str_validator(string:str, conversion_dict:dict[str:Enum]) -> bool :
     return True
 
 def str_validator(string:str, target:str) -> bool :
+    '''Returns equality for two strings'''
     return string.lower() == target

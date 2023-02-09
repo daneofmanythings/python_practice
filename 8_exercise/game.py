@@ -13,6 +13,10 @@ class RPSGame:
         '''Adds a player to the players list'''
         self.players.append(player)        
     
+    def round_played(self) -> None :
+        '''Increments round_num property'''
+        self.round_num += 1
+    
     #TODO: Maybe change how this functions and throw some of this logic to the main function
     def compare_throws(self) -> RPSPlayer | None :
         '''Returns the player that wins or None in the case of a tie
@@ -29,6 +33,7 @@ class RPSGame:
             None
 
     def reset_throws(self) -> None :
+        '''Resets the current_throw property for players.'''
         for player in self.players :
             player.set_throw(None)
 
@@ -36,6 +41,3 @@ class RPSGame:
         '''Adjusts the value of playing'''
         if response == Responses.NO :
             self.playing = False
-
-    def round_played(self) -> None :
-        self.round_num += 1

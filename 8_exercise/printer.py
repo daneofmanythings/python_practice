@@ -76,9 +76,11 @@ class RPSCLIPrinter :
         self.cli_print(self.opener)
     
     def redraw_with_round_num(self, game:RPSGame) :
+        '''Cleans up main() slightly'''
         self.redraw()
         self.cli_print(self.formatter([game.round_num], self.round))
 
 # HELPER FUNCTION
 def colored(r:int, g:int, b:int, text:str) -> str :
+    '''Sets a string to a color specified by RGB values'''
     return f"\033[38;2;{r};{g};{b}m{text}\033[0m"
