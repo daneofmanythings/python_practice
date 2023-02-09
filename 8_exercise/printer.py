@@ -63,9 +63,9 @@ class RPSCLIPrinter :
         )
         return self.formatter(str_list, self.throw_output)
     
-    def cli_print(self, string: str) -> None :
+    def cli_print(self, string:str, **kwargs) -> None :
         '''Keeping print calls out of other classes/functions'''
-        print(string)
+        print(string, **kwargs)
 
     def redraw(self) :
         '''Redraws the screen to avoid clutter and keep secrets'''
@@ -74,6 +74,10 @@ class RPSCLIPrinter :
         else :
             os.system('clear')
         self.cli_print(self.opener)
+    
+    def redraw_with_round_num(self, game:RPSGame) :
+        self.redraw()
+        self.cli_print(self.formatter([game.round_num], self.round))
 
 # HELPER FUNCTION
 def colored(r:int, g:int, b:int, text:str) -> str :

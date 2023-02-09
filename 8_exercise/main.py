@@ -39,9 +39,9 @@ def main() -> None:
 
     # Getting the names of the players
     for num in range(2):  # <- Will always be 2 for this implementation
-        player_name = data_input(
-            printer.formatter([num + 1], printer.player_prompt))
-
+        printer.cli_print(printer.formatter([num + 1], printer.player_prompt), end='')
+        player_name = data_input()
+        
         if str_validator(player_name, COMPUTER):  # Checking for an AI opponent
             game.add_player(AIPlayer(player_name + str(num)))
         else:
@@ -58,14 +58,15 @@ def main() -> None:
     while game.playing:
         # Getting and setting the throws for both players
         for player in game.players:
+            printer.cli_print(printer.formatter([player.name], printer.throw_prompt), end='')
             throw = player.get_throw()
             player.set_throw(throw)
 
-            printer.redraw()
-            printer.cli_print(printer.formatter([game.round_num], printer.round))
+            printer.redraw_with_round_num(game)
 
         # Comparing the throws to find the round winner
         round_winner = game.compare_throws()
+        printer.redraw_with_round_num(game)
 
         # Printing the throws
         for player in game.players:
@@ -91,8 +92,7 @@ def main() -> None:
         game.reset_throws()
         game.round_played()
 
-        printer.redraw()
-        printer.cli_print(printer.formatter([game.round_num], printer.round))
+        printer.redraw_with_round_num(game)
 
     printer.redraw()
 

@@ -34,9 +34,8 @@ class IOPlayer(RPSPlayer) :
     def get_throw(self) -> Throws :
         '''Implemented with strings and helper functions from data module'''
         while True :
-            response = data_input(
-                f'{self.name}, choose rock, paper, or scissors >>> '
-            )
+            response = data_input()
+            
             if not first_in_str_validator(response, THROW_CONVERTER) :
                 continue
 

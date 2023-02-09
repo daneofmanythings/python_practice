@@ -44,8 +44,8 @@ THROW_DICT = {  # Nested dictionary to grab the winner.
 }
 
 # HELPER FUNCTIONS
-def data_input(string:str) -> str :
-    return input(string)
+def data_input(*args) -> str :
+    return input(*args)
 
 def first_in_str_validator(string:str, conversion_dict:dict[str:Enum]) -> bool :
     '''Validates the string against the conversion dictionary and returns the converted
