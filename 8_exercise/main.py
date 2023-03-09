@@ -39,7 +39,9 @@ def main() -> None:
 
     # Getting the names of the players
     for num in range(2):  # <- Will always be 2 for this implementation
-        printer.cli_print(printer.formatter([num + 1], printer.player_prompt), end='')
+        printer.cli_print(
+            printer.formatter([num + 1], printer.player_prompt), end=''
+        )
         player_name = data_input()
         
         if str_validator(player_name, COMPUTER):  # Checking for an AI opponent
@@ -58,7 +60,9 @@ def main() -> None:
     while game.playing:
         # Getting and setting the throws for both players
         for player in game.players:
-            printer.cli_print(printer.formatter([player.name], printer.throw_prompt), end='')
+            printer.cli_print(
+                printer.formatter([player.name], printer.throw_prompt), end=''
+            )
             throw = player.get_throw()
             player.set_throw(throw)
 

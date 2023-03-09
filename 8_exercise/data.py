@@ -4,7 +4,8 @@ from enum import Enum, auto
 
 COMPUTER = 'computer'
 
-class Throws(Enum) :  # Values are strings to aid with printing. strEnum isn't implemented in 3.10
+# Values are strings to aid with printing. strEnum isn't implemented in 3.10
+class Throws(Enum) :
     ROCK = 'rock'
     PAPER = 'paper'
     SCISSORS = 'scissors'
@@ -49,8 +50,8 @@ def data_input(*args) -> str :
     return input(*args)
 
 def first_in_str_validator(string:str, conversion_dict:dict[str:Enum]) -> bool :
-    '''Validates the string against the conversion dictionary and returns the converted
-       object if True'''
+    '''Validates the string against the conversion dictionary and returns 
+    the converted object if True'''
     if not string or string[0] not in conversion_dict :
         return False
     return True

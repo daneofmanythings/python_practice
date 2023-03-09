@@ -18,7 +18,7 @@ class RPSPlayer(ABC) :
         pass
 
     @abstractmethod
-    def set_throw(self) -> None :
+    def set_throw(self, throw:Throws) -> None :
         pass
 
 class IOPlayer(RPSPlayer) :
